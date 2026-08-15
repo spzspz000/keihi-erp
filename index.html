@@ -3145,8 +3145,7 @@ let rcItems=[], dvItems=[], scItems=[];
 
 // 解析結果をCSV風にtextareaへ表示する
 function itemsToCsvDisplay(items){
-    const header='取引日,科目,取引手段,摘要,取引先,税込金額,消費税率,軽減税率対象
-';
+    const header='取引日,科目,取引手段,摘要,取引先,税込金額,消費税率,軽減税率対象';
     const rows=items.map(it=>{
         const title=formatTitle(it.category, it.is_reduced);
         return [
