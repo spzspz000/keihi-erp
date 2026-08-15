@@ -3048,7 +3048,12 @@ function b64(file){return new Promise((res,rej)=>{const r=new FileReader();r.rea
 async function fetchAI(payload, retries=3){
     const activeKey = (S.settings.geminiApiKey || API_KEY || '').trim();
     if(!activeKey) throw new Error('API_KEY_ERROR');
-    const modelsToTry = ['gemini-2.5-flash','gemini-2.0-flash'];
+    let modelsToTry = _modelCache || [
+    'gemini-3.7-flash',
+    'gemini-3.6-flash',
+    'gemini-3.5-flash',
+    'gemini-2.5-flash'   // 2026-10-16 終了予定の保険
+];
     let lastError = null;
     for(const modelName of modelsToTry){
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
