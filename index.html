@@ -70,7 +70,8 @@
             <span>CR ERP<br><span class="text-[10px] text-slate-400 font-normal block uppercase tracking-widest">Freelance OS</span></span>
         </h1>
     </div>
-    <nav class="flex-1 overflow-y-auto py-4">
+    <nav class="flex-1 
+        overflow-y-auto py-4">
         <ul class="space-y-1 px-3">
             <li class="pb-2 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Core</li>
             <li><button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-item active w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg text-left gap-2"><i class="fas fa-chart-pie text-blue-400 w-5"></i>ダッシュボード</button></li>
@@ -334,8 +335,9 @@
                                 <p class="font-mono font-bold text-red-600 text-xs sm:text-sm" id="fc-income-tax">¥0</p>
                             </div>
                             <div class="bg-slate-50 p-2 sm:p-3 rounded-lg border">
-                                <p class="text-[9px] sm:text-[10px] text-slate-500 mb-1">住民税（翌年）</p>
+                                <p class="text-[9px] sm:text-[10px] text-slate-500 mb-0.5">住民税（翌年）<span class="text-[8px] text-emerald-500 font-bold ml-1">ふるさと納税反映後</span></p>
                                 <p class="font-mono font-bold text-red-600 text-xs sm:text-sm" id="fc-resident-tax">¥0</p>
+                                <p class="text-[8px] text-slate-400 mt-0.5 leading-tight">反映前: <span class="font-mono line-through" id="fc-resident-tax-before">¥0</span></p>
                             </div>
                             <div class="bg-slate-50 p-2 sm:p-3 rounded-lg border">
                                 <p class="text-[9px] sm:text-[10px] text-slate-500 mb-0.5">個人事業税</p>
@@ -346,11 +348,31 @@
                                 <p class="text-[9px] sm:text-[10px] text-slate-500 mb-1" id="fc-cons-label">消費税（2割特例）</p>
                                 <p class="font-mono font-bold text-red-600 text-xs sm:text-sm" id="fc-consumption-tax">¥0</p>
                             </div>
+                            <div class="bg-slate-50 p-2 sm:p-3 rounded-lg border">
+                                <p class="text-[9px] sm:text-[10px] text-slate-500 mb-1">国民健康保険（翌年）</p>
+                                <p class="font-mono font-bold text-red-600 text-xs sm:text-sm" id="fc-kokuho">¥0</p>
+                            </div>
+                            <div class="bg-slate-50 p-2 sm:p-3 rounded-lg border">
+                                <p class="text-[9px] sm:text-[10px] text-slate-500 mb-1">国民年金（翌年）</p>
+                                <p class="font-mono font-bold text-red-600 text-xs sm:text-sm" id="fc-nenkin">¥0</p>
+                            </div>
                         </div>
                         <div class="bg-red-50 p-3 rounded-lg border border-red-100 flex justify-between items-center gap-2">
                             <p class="text-xs font-bold text-red-800"><i class="fas fa-exclamation-triangle mr-1"></i>翌年の後払い税金 合計予測</p>
                             <p class="font-mono font-extrabold text-red-700 text-base sm:text-lg shrink-0" id="fc-total-tax">¥0</p>
                         </div>
+                        <details class="bg-slate-50 border border-slate-200 rounded-lg mt-2 text-xs">
+                            <summary class="cursor-pointer font-bold text-slate-600 p-3 select-none"><i class="fas fa-calculator mr-1 text-slate-400"></i>計算ロジックはこちら</summary>
+                            <div class="px-3 pb-3 space-y-2.5 text-slate-600 leading-relaxed">
+                                <p class="text-[10px] text-slate-400">共通：課税所得 = 事業所得 − 各種控除 − 基礎控除48万 − 国民年金 − 国保 − 共済 − iDeCo</p>
+                                <div><span class="font-bold text-red-600">① 所得税（追加払）</span><br>課税所得に累進税率（5〜45%）→ ×1.021（復興特別所得税）→ 源泉徴収済み分を差引いた残額。</div>
+                                <div><span class="font-bold text-red-600">② 住民税（翌年）</span><br>課税所得 × 10%（所得割）＋ 5,000円（均等割）。今年の所得に対し翌年6月〜請求。<br>ふるさと納税分を控除：(寄付額−2,000円)×(1−所得税率×1.021) を住民税から差引（寄付は上限目安まで有効）。カードは反映後を表示。</div><div><span class="font-bold text-red-600">③ 個人事業税</span><br>（事業所得 − 290万円の事業主控除）× 5%。290万以下なら0円。</div>
+                                <div><span class="font-bold text-red-600">④ 消費税（2割特例）</span><br>年間課税売上 × 10% × 20%（＝実質売上の2%）。インボイス登録者向けの特例。</div>
+                                <div><span class="font-bold text-red-600">⑤ 国民健康保険（翌年）</span><br>（事業所得 − 43万の基礎控除＝旧ただし書き所得）× 9.24%（所得割）＋ 52,000円（均等割）、上限106万円。東京23区モデルの概算。40歳以上は介護分が別途上乗せ。</div>
+                                <div><span class="font-bold text-red-600">⑥ 国民年金</span><br>16,980円 × 12ヶ月 ＝ 固定。所得に関係なく定額（年度で改定）。</div>
+                                <p class="text-[10px] text-slate-400 pt-1 border-t">※率・上限は自治体/年度で変動。実際の通知書が来たら月別欄で上書き推奨。</p>
+                            </div>
+                        </details>
 
                         <!-- ===== 税率ブラケット シミュレーター ===== -->
                         <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-4 sm:p-5 mt-2 text-white">
@@ -2135,10 +2157,15 @@ function runSimulation(){
     if(taxable>18000000)rate=.4;else if(taxable>9000000)rate=.33;else if(taxable>6950000)rate=.23;else if(taxable>3300000)rate=.2;else if(taxable>1950000)rate=.1;
     const fd=1-.1-(rate*1.021);
     const fur=fd>0?Math.max(0,(taxable*.1*.2)/fd+2000):0;
-    const remIt=Math.max(0,it-whY),totTax=remIt+res+hlth+16980*12+ent+cons,pool=totTax/12;
-
+    const kokuhoBaseNext=Math.max(0,(biz-ded)-430000);
+    const hlthNext=Math.min(1060000,kokuhoBaseNext*0.0924+52000);
+    const remIt=Math.max(0,it-whY);
+    const nextYearTax=remIt+res+ent+cons;
+    const nextYearIns=hlthNext+16980*12;
+    const totTax=nextYearTax+nextYearIns,pool=totTax/12;
     // ふるさと納税：今年の寄付済み合計
-    const thisYear=new Date().getFullYear();
+    const _fcMonth=document.getElementById('dash-month')?.value||'';
+    const thisYear=_fcMonth?parseInt(_fcMonth.split('-')[0],10):new Date().getFullYear();
     const furPaid=S.furusato.filter(f=>f.date&&f.date.startsWith(String(thisYear))).reduce((s,f)=>s+Number(f.amount||0),0);
     const furRemain=Math.max(0,fur-furPaid);
 
@@ -2154,7 +2181,20 @@ function runSimulation(){
     document.getElementById('fc-enterprise-tax').textContent=fmt(ent);
     document.getElementById('fc-consumption-tax').textContent=fmt(cons);
     document.getElementById('fc-total-tax').textContent=fmt(totTax);
-
+    const _furEff=Math.min(furPaid,fur);
+    const _furDeduct=Math.max(0,_furEff-2000)*(1-rate*1.021);
+    const _resAfter=Math.max(0,res-_furDeduct);
+    const _totAfter=totTax-res+_resAfter;
+    document.getElementById('fc-resident-tax').textContent=fmt(_resAfter);
+    document.getElementById('fc-total-tax').textContent=fmt(_totAfter);
+    const _rb=document.getElementById('fc-resident-tax-before');if(_rb)_rb.textContent=fmt(res);
+    const _kBase=Math.max(0,(biz-ded)-430000);
+    const _hlthNext=Math.min(1060000,_kBase*0.0924+52000);
+    const _k=document.getElementById('fc-kokuho');if(_k)_k.textContent=fmt(_hlthNext);
+    const _n=document.getElementById('fc-nenkin');if(_n)_n.textContent=fmt(16980*12);
+    // 内訳を出す場合（対応する要素があれば）
+    // document.getElementById('fc-tax-only').textContent=fmt(nextYearTax);
+    // document.getElementById('fc-ins-only').textContent=fmt(nextYearIns);
     // Bar chart
     const pT=Math.min(revY>0?(totTax/revY)*100:0,100),pE=Math.min(revY>0?(expY/revY)*100:0,100),pI=Math.max(0,100-pT-pE);
     document.getElementById('bar-tax').style.width=`${pT}%`;document.getElementById('bar-expense').style.width=`${pE}%`;document.getElementById('bar-income').style.width=`${pI}%`;
@@ -2854,7 +2894,7 @@ function dupExpense(id){const p=S.expenses.find(x=>String(x.id)===String(id));if
 function importPdfData2026(){customConfirm('添付のPDF「取引帳」から2026年分の経費データを取り込みますか？',()=>{const pdfData=[{d:'2026-01-12',c:'会議費',p:'コメダ珈琲店 アトレ亀戸店',t:'株式会社S Sパートナー様と新規案件に関する相談',a:2980,r:10},{d:'2026-01-21',c:'接待交際費',p:'士別バーベキュー 札幌店',t:'Algrowth様との新規案件の相談',a:7480,r:10},{d:'2026-01-21',c:'接待交際費',p:'回転寿し トリトン厚別店',t:'Algrowth様との新規案件の相談',a:5313,r:10},{d:'2026-01-26',c:'経費',p:'Octopus Energy',t:'電気料金 2025/12/15-01/14(事業利用分20%)',a:2160,r:10},{d:'2026-01-27',c:'経費',p:'OpenAI, LLC',t:'ChatGPT Plus 1月分利用料(業務100%)',a:3500,r:10},{d:'2026-01-31',c:'接待交際費',p:'江戸前回転寿司もりいち亀戸駅前',t:'アーバンコネクト様への打ち合わせ',a:3330,r:10},{d:'2026-02-04',c:'会議費',p:'ランビックスイーツデリ',t:'ラクスル様との打ち合わせ',a:1130,r:8},{d:'2026-02-07',c:'接待交際費',p:'根室花まる 錦糸町テルミナ店',t:'株式会社BLAMとの打ち合わせ',a:3350,r:10},{d:'2026-02-11',c:'接待交際費',p:'LAS青山店',t:'アイファクトリー様との新規案件相談',a:19250,r:10},{d:'2026-02-11',c:'会議費',p:'ドトール南青山5丁目店',t:'リベイス様との打ち合わせ',a:1150,r:10},{d:'2026-02-13',c:'会議費',p:'餃子の王将亀戸店',t:'リベイス様との打ち合わせ',a:3037,r:10},{d:'2026-02-15',c:'接待交際費',p:'回転寿しトリトン東京スカイツリ',t:'合同会社Liberra様と新規案件の相談',a:5874,r:10},{d:'2026-02-15',c:'接待交際費',p:'チーズガーデン東京ソラマチ店',t:'アイファクトリー様への手土産',a:1690,r:8},{d:'2026-02-16',c:'会議費',p:'日高屋 亀戸店(出前館)',t:'ラクスル様との打ち合わせ',a:1410,r:8},{d:'2026-02-21',c:'接待交際費',p:'日本橋芋屋金次郎',t:'アーバンコネクト様への手土産',a:950,r:8},{d:'2026-02-21',c:'会議費',p:'泰興楼八重洲本店',t:'株式会社S Sパートナー様と新規案件に関する相談',a:2100,r:10},{d:'2026-02-22',c:'接待交際費',p:'江戸前回転寿司もりいち亀戸駅前',t:'フラッグシップオーケストラ様と新規案件の相談',a:2320,r:10},{d:'2026-02-26',c:'接待交際費',p:'豚ウォーリー亀戸店',t:'アイファクトリー様との新規案件相談',a:7282,r:10},{d:'2026-03-01',c:'接待交際費',p:'三越銀座店',t:'アイファクトリー様への手土産',a:1512,r:10},{d:'2026-03-01',c:'会議費',p:'KOMEDAis東銀座',t:'アーバンコネクト様との打ち合わせ',a:850,r:10},{d:'2026-03-03',c:'会議費',p:'日高屋 亀戸店(出前館)',t:'ラクスル様との打ち合わせ',a:1500,r:8},{d:'2026-03-03',c:'会議費',p:'大戸屋ごはん処 亀戸駅前店',t:'ラクスル様との打ち合わせ',a:1350,r:8},{d:'2026-03-05',c:'会議費',p:'日高屋 亀戸店(出前館)',t:'リベイス様との打ち合わせ',a:1200,r:8},{d:'2026-03-06',c:'会議費',p:'あん庵 赤坂見附店',t:'アーバンコネクト様との会食',a:11686,r:10},{d:'2026-03-07',c:'接待交際費',p:'コメダ珈琲店 アトレ亀戸店',t:'アーバンコネクト様への手土産',a:910,r:10},{d:'2026-03-07',c:'会議費',p:'コメダ珈琲店 アトレ亀戸店',t:'アーバンコネクト様とのMTG',a:2080,r:10}];let addedCount=0;pdfData.forEach(item=>{const exists=S.expenses.some(e=>e.payDate===item.d&&e.total===item.a&&e.payee===item.p);if(!exists){const amount=Math.floor(item.a/(1+(item.r/100)));const tax=item.a-amount;S.expenses.push({id:'pdf-'+Date.now()+'-'+addedCount,category:item.c,payDate:item.d,payee:item.p,title:item.t,amount,tax,total:item.a,withholding:0,net:item.a});addedCount++;}});if(addedCount>0){save();renderExpense();runSimulation();customAlert(`${addedCount}件の経費データをインポートしました！`,'success');}else{customAlert('既に取り込み済みか対象データがありません。','info');}});}
 
 // ===== Google Drive Picker =====
-const GDRIVE_CLIENT_ID='855790924544-5h8adbrcfpmmk8lu4haprfcnjed4umc9.apps.googleusercontent.com';
+const GDRIVE_CLIENT_ID='731001224801-emnqbtl1f7op463gouvm3fe5akodaq6c.apps.googleusercontent.com';
 const GDRIVE_SCOPES='https://www.googleapis.com/auth/drive.readonly';
 let _gapiInited=false,_gisInited=false,_tokenClient=null,_drivePickerTarget=null;
 
@@ -3045,47 +3085,23 @@ function bulkYayoiFlag(type){
 }
 function initPaste(){document.addEventListener('paste',e=>{if(!document.getElementById('tab-tools').classList.contains('active'))return;if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName))return;const items=e.clipboardData.items;let added=false;for(let i=0;i<items.length;i++){if(items[i].type.indexOf('image')!==-1){const f=items[i].getAsFile();const ext=f.type.split('/')[1]||'png';rcFiles.push(new File([f],`pasted_${Date.now()}.${ext}`,{type:f.type}));added=true;}}if(added){renderFileList(rcFiles,'file-list','fas fa-receipt text-indigo-400');document.getElementById('btn-analyze').disabled=!rcFiles.length;const dz=document.getElementById('drop-zone');dz.classList.add('bg-indigo-50','border-indigo-400');setTimeout(()=>dz.classList.remove('bg-indigo-50','border-indigo-400'),300);}});}
 function b64(file){return new Promise((res,rej)=>{const r=new FileReader();r.readAsDataURL(file);r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;});}
-async function fetchAI(payload, retries=3){
-    const activeKey = (S.settings.geminiApiKey || API_KEY || '').trim();
-    if(!activeKey) throw new Error('API_KEY_ERROR');
-    const modelsToTry = ['gemini-2.5-flash','gemini-2.0-flash'];
-    let lastError = null;
+async function fetchAI(payload,retries=3){
+    const activeKey=S.settings.geminiApiKey||API_KEY;
+    const isCustomKey=(activeKey&&activeKey!==API_KEY);
+    const modelsToTry=isCustomKey?['gemini-2.5-flash','gemini-2.0-flash','gemini-1.5-flash-latest']:['gemini-2.5-flash-preview-09-2025'];
+    let lastError=null;
     for(const modelName of modelsToTry){
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
-        const delays = [1000,2000,4000];
-        for(let i=0; i<=retries; i++){
+        const url=`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${activeKey}`;
+        const delays=[1000,2000,4000];
+        for(let i=0;i<=retries;i++){
             try{
-                const r = await fetch(url,{
-                    method:'POST',
-                    headers:{
-                        'Content-Type':'application/json',
-                        'x-goog-api-key': activeKey   // ← AQ.形式はこちらでないと通らない
-                    },
-                    body: JSON.stringify(payload)
-                });
-                if(!r.ok){
-                    let errText='';
-                    try{ const j=await r.json(); errText=j.error?.message||`HTTP ${r.status}`; }
-                    catch(e){ errText=`HTTP ${r.status}`; }
-                    console.error('[Gemini]', r.status, modelName, errText);
-                    if(r.status===429) throw new Error(`QUOTA: ${errText}`);
-                    if(r.status===401 || r.status===403 || (r.status===400 && /api key/i.test(errText)))
-                        throw new Error('API_KEY_ERROR');
-                    if(r.status===404 || /not found|not supported/i.test(errText))
-                        throw new Error('MODEL_NOT_FOUND');
-                    throw new Error(errText);
-                }
-                return await r.json();
-            }catch(e){
-                lastError = e;
-                if(e.message==='API_KEY_ERROR' || e.message.startsWith('QUOTA:')) throw e;
-                if(e.message==='MODEL_NOT_FOUND') break;
-                if(i===retries) break;
-                await new Promise(res=>setTimeout(res, delays[i]));
-            }
+                const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+                if(!r.ok){let errText='';try{const errJson=await r.json();errText=errJson.error?.message||`HTTP ${r.status}`;}catch(e){errText=`HTTP ${r.status}`;}if(r.status===401||r.status===403||(r.status===400&&errText.toLowerCase().includes('api key')))throw new Error('API_KEY_ERROR');if(r.status===404||errText.toLowerCase().includes('not found')||errText.toLowerCase().includes('not supported'))throw new Error('MODEL_NOT_FOUND');throw new Error(errText);}
+                const data=await r.json();return data;
+            }catch(e){lastError=e;if(e.message==='API_KEY_ERROR')throw e;if(e.message==='MODEL_NOT_FOUND')break;if(i===retries)break;await new Promise(r=>setTimeout(r,delays[i]));}
         }
     }
-    if(lastError && lastError.message!=='MODEL_NOT_FOUND') throw lastError;
+    if(lastError&&lastError.message!=='MODEL_NOT_FOUND')throw lastError;
     throw new Error('お使いのAPIキーで利用可能なAIモデルが見つかりませんでした。');
 }
 function extractCsv(text){const m=text.match(new RegExp('\\x60\\x60\\x60(?:csv|text)?\\n([\\s\\S]*?)\\n\\x60\\x60\\x60'));return m?m[1].trim():text.trim();}
@@ -3129,7 +3145,8 @@ let rcItems=[], dvItems=[], scItems=[];
 
 // 解析結果をCSV風にtextareaへ表示する
 function itemsToCsvDisplay(items){
-    const header='取引日,科目,取引手段,摘要,取引先,税込金額,消費税率,軽減税率対象';
+    const header='取引日,科目,取引手段,摘要,取引先,税込金額,消費税率,軽減税率対象
+';
     const rows=items.map(it=>{
         const title=formatTitle(it.category, it.is_reduced);
         return [
@@ -3364,14 +3381,13 @@ function delHistory(id){customConfirm('この履歴を削除しますか？',()=
 
 // ====== Firebase Cloud Sync ======
 const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyCn1zmfrvwGjusPpsZFGz-11tH2t1FCwpM",
-    authDomain: "keihi-nyuryoku.firebaseapp.com",
-    projectId: "keihi-nyuryoku",
-    storageBucket: "keihi-nyuryoku.firebasestorage.app",
-    messagingSenderId: "428857673044",
-    appId: "1:428857673044:web:4bb2d74508abe52399f4c1"
+    apiKey: "AIzaSyA1tuWKJRYlA48KsF-Vd3Tzo5zAy8FV3cQ",
+    authDomain: "zaimu-muraoka.firebaseapp.com",
+    projectId: "zaimu-muraoka",
+    storageBucket: "zaimu-muraoka.firebasestorage.app",
+    messagingSenderId: "783805203277",
+    appId: "1:783805203277:web:fe085d988172a041d7ad04"
 };
-
 
 // Firebase objects populated after init; save() uses these directly (no dynamic import in save)
 let _setDoc = null;
@@ -3451,4 +3467,3 @@ async function save(){
 </script>
 </body>
 </html>
-
